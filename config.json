@@ -8,10 +8,11 @@
             "password": "password"
         }
     },
-    "fileName": "Server.exe",
-    "binFolder": ".\\bin\\",
-    "serversMinCount": 1,
-    "serversMaxCount": 4,
-    "ports": [{"start": 7777, "end": 7780}],
-    "timeout": 1
+    "application": {
+        "fileName": "Server.exe",
+        "binFolder": ".\\bin\\",
+        "starupArgs": ["-quit", "-batchmode"],
+        "ports": [{"start": 7777, "end": 7780}],
+        "timeout": 1
+    }
 }

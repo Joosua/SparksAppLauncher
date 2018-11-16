@@ -2,10 +2,11 @@ const EventEmitter = require('events');
 const cp = require('child_process');
 
 class AppInstance extends EventEmitter {
-    constructor(folder, file, port, timeout) {
+    constructor(folder, file, args, port, timeout) {
         super();
         this._folder = folder;
         this._file = file;
+        this._arguments = args;
         this._port = port;
         this._status = AppInstance.STATUS.INIT;
         this._process = null;
@@ -42,11 +43,19 @@ class AppInstance extends EventEmitter {
      */
     start() {
         if (this._process !== null) {
-            console.warn('Apllication is already running');
+            console.warn('Application is already running');
             return;
         }
-        console.log('Starting new apllication ' + this._file + ':' + this._port + '.');
-        this._process = cp.spawn(this._folder + this._file, [/*"-quit", "-batchmode", */"-port", this._port]);
+        
+        let args = this._arguments.concat(["-port", this._port]);
+
+        let strArgs = "";
+        for (let i = 0; i < args.length; ++i) {
+            strArgs += args[i] + " ";
+        }
+        console.log('Starting new application "' + this._file + ' ' + strArgs + '".');
+
+        this._process = cp.spawn(this._folder + this._file, args);
         this._process.on('exit', this._onExit.bind(this));
         this.status = AppInstance.STATUS.RUNNING;
 

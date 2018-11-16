@@ -105,7 +105,7 @@ class GameSpark extends EventEmitter {
     }
 
     _onError(error) {
-        console.log(error);
+        console.error(error);
         process.exit(1);
     }
 }

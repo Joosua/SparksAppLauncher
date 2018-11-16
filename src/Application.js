@@ -5,14 +5,13 @@ const GameSparks = require('./GameSpark.js');
 class Application {
     constructor(config) {
         this._instances = [];
-        this._minCount = 0;
-        this._maxCount = 0;
         this._ports = [];
         this._folder = "";
         this._file = "";
+        this._arguments = [];
         this._timeout = -1;
 
-        this.setConfig(config);
+        this.setConfig(config.application);
 
         os.loadavg(5);
         os.cpuUsage(this._onCpuLoad.bind(this));
@@ -29,13 +28,13 @@ class Application {
      * @param {object|null} config options. If null use Application.DEFAULT_SETTINGS.
      */
     setConfig(config) {
-        if (config === null) {
-            config = Applications.DEFAULT_CONFIG;
+        if (config === undefined) {
+            console.error("application config data is missing from config.json.");
+            process.exit(1);
         }
 
         for (let i = 0; i < config.ports.length; ++i) {
             let p = config.ports[i];
-            console.log(i);
             for (let j = p.start; j < p.end; j++) {
                 this._ports.push(j);
             }
@@ -44,8 +43,7 @@ class Application {
 
         this._folder = config.binFolder;
         this._file = config.fileName;
-        this._minCount = config.serversMinCount;
-        this._maxCount = config.serversMaxCount;
+        this._arguments = config.starupArgs;
         this._timeout = config.timeout * 60 * 1000;
     }
 
@@ -90,7 +88,7 @@ class Application {
                 // @TODO send respond back to spark
                 return;
             }
-            let app = this._createInstance(this._folder, this._file, port, this._timeout);
+            let app = this._createInstance(this._folder, this._file, this._arguments, port, this._timeout);
             app.start();
             break;
         }
@@ -104,11 +102,12 @@ class Application {
      * Start new application instance for given file and port
      * @param {string} folder path
      * @param {string} file name
+     * @param {array} args array of start up arguments
      * @param {number} port number
      * @param {number} timeout auto shutdown time in ms. Auto shutdown is disabled when timeout value is less than zero.
      */
-    _createInstance(folder, file, port, timeout) {
-        let instance = new AppInstance(folder, file, port, timeout);
+    _createInstance(folder, file, args, port, timeout) {
+        let instance = new AppInstance(folder, file, args, port, timeout);
         instance.on(AppInstance.EVENTS.OnStatusChanged, this._onApplicationStatus.bind(this));
         return instance;
     }
@@ -144,14 +143,5 @@ class Application {
         console.log('CPU Free (%): ' + value);
     }
 }
-
-Application.DEFAULT_CONFIG = {
-    fileName: "",
-    binFolder: "",
-    serversMinCount: 1,
-    serversMaxCount: 2,
-    ports: [{ start: 7777, end: 7778 }],
-    timeout: 10
-};
 
 module.exports = Application;
