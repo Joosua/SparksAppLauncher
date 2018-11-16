@@ -61,4 +61,5 @@ typings/
 .next
 
 # executable directory
-bin
+bin/*
+!bin/.keep 
