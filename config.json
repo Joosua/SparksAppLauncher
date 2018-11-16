@@ -1,0 +1,17 @@
+{
+    "gameSpark": {
+        "apiKey": "",
+        "serverSecret": "",
+        "stage": "preview",
+        "user" : {
+            "username":"admin",
+            "password": "password"
+        }
+    },
+    "fileName": "Server.exe",
+    "binFolder": ".\\bin\\",
+    "serversMinCount": 1,
+    "serversMaxCount": 4,
+    "ports": [{"start": 7777, "end": 7780}],
+    "timeout": 1
+}

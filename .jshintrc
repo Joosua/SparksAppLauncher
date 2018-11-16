@@ -1,0 +1,6 @@
+{
+    "esversion": 6,
+    "eqeqeq": true,
+    "maxdepth": 4,
+    "unused": "vars"
+}

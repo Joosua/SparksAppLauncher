@@ -1,0 +1,17 @@
+{
+  "name": "app-launcher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Main.js",
+  "dependencies": {
+    "gamesparks-node": "^1.0.0",
+    "os-utils": "^0.0.14"
+  },
+  "scripts": {
+    "start": "node Main.js",
+    "test": "jshint --config .jshintrc ."
+  },
+  "keywords": [],
+  "author": "Jonne Vaisanen",
+  "license": "MIT"
+}
